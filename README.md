@@ -5,7 +5,7 @@
 ## Technologies
 ***
 A list of technologies used within the project:
-* [MongoDB](https://example.com): Version 12.3 
-* [EXpress](https://example.com): Version 2.34
-* [Reactjs](https://example.com): Version 1234
-* [Nodejs](https://example.com): Version 1234
+* [MongoDB](https://example.com)
+* [EXpress](https://example.com)
+* [Reactjs](https://example.com)
+* [Nodejs](https://example.com)
