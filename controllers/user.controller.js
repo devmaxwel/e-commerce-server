@@ -1,6 +1,8 @@
 import userModel from "../models/user.model.js";
 import asyncHandler from "express-async-handler";
 import { generateToken } from "../utils/jwt.util.js";
+import SendGridHelper from "../middleware/email.midlleware.js";
+
 
 export const registerUser = asyncHandler(async(req, res) => {
 
@@ -8,9 +10,9 @@ export const registerUser = asyncHandler(async(req, res) => {
 
   const ifUserExist = await userModel.findOne({ email });
 
-  if (ifUserExist) {
+  if(ifUserExist){
     res.sendStatus(409);
-    throw new Error("email you just provided is alreaady in use, please check again or use another one ");
+    res.json({message: "email provided is already in use, please check and try again or use another one "});
   }
 
   const user = await userModel.create({
@@ -18,8 +20,10 @@ export const registerUser = asyncHandler(async(req, res) => {
     email,
     password,
     profilePic,
-    admin
+    admin,
   });
+
+  const token = generateToken(user._id)
 
   if (user) {
     res.json({
@@ -28,12 +32,15 @@ export const registerUser = asyncHandler(async(req, res) => {
       email: user.email,
       admin:user.admin,
       profilePic:user.profilePic,
-      token:generateToken(user._id)
+      token:token,
     });
+    
+
+    await SendGridHelper.sendConfirmationMail(token,email);
 
   } else {
 
-    throw new Error("Internal Server Error ");
+    throw new Error({message: "an error occurred while processing your request, please try again "});
   }
 
 });
@@ -44,6 +51,8 @@ export const loginUser = asyncHandler(async(req, res) => {
 
   const user = await userModel.findOne({ email });
 
+  const token = generateToken(user._id)
+
   if(user && (await user.matchPassword(password))){
     res.json({
       _id:user._id,
@@ -51,13 +60,23 @@ export const loginUser = asyncHandler(async(req, res) => {
       email: user.email,
       profilePic:user.profilePic,
       admin:user.admin,
-      token:generateToken(user._id)
+      token:token,
 
     });
 
   } else {
     res.sendStatus(400)
-    throw new Error("inavalid email or password please check and try again");
+    res.json({message: "inavalid email or password please check and try again"});
   }
 
 });
+
+export const passwordReset= asyncHandler(async(req, res) => {
+     const { email } = req.body;
+
+     const userExist = await userModel.findOne({email})
+
+     if(userExist){
+       
+     }
+})

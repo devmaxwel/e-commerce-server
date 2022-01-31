@@ -1,6 +1,6 @@
-import { createProduct, fetchProducts } from "./controllers/products.controller.js";
+import { createProduct, deleteProduct, fetchProducts, fetchSingleProduct, updateProduct } from "./controllers/products.controller.js";
 import { loginUser, registerUser } from "./controllers/user.controller.js";
-import { productCreationProtection, productViewingProtection } from "./middleware/products.middleware.js";
+import { isAdminAuth, isUserAuth } from "./middleware/authorization.middleware.js";
 import ValidateResource from "./middleware/ValidateResource.js";
 import { createUserValidation, loginUserValidation } from "./validation/user.validation.js";
 
@@ -11,15 +11,21 @@ import { createUserValidation, loginUserValidation } from "./validation/user.val
         return res.sendStatus(200)
      });
 
-   //   REST API's
-  //  User Authentication
+   //   REST API's endpoints
+
+   //  User Authentication
      app.post("/api/createuser", ValidateResource(createUserValidation) , registerUser);
      app.post("/api/loginuser", ValidateResource(loginUserValidation), loginUser );
 
-  // Products Fetching and CRUD Operations
-     app.post('/api/products', productCreationProtection, createProduct);
-     app.get("/api/products",productViewingProtection ,fetchProducts);
-         
+   // Products Fetching & Creation
+     app.post('/api/products', isAdminAuth, createProduct);
+     app.get("/api/products",isUserAuth,fetchProducts);
+
+   // CRUD Operations with respective middleware 
+     app.get('/api/product/:id',isUserAuth, fetchSingleProduct) //fetching single product
+     app.put('/api/product/:id',isAdminAuth,updateProduct) //updating single product
+     app.delete('/api/product/:id', isAdminAuth,  deleteProduct) // deleting single product
+   
 }
 
 export default routes;

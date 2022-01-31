@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler'
 import userModel from '../models/user.model.js'
 
 
-export const productCreationProtection = asyncHandler(async(req, res, next) => {
+export const isAdminAuth = asyncHandler(async(req, res, next) => {
 
     let authorizationToken;
 
@@ -19,25 +19,25 @@ export const productCreationProtection = asyncHandler(async(req, res, next) => {
 
             // Check if admin field is true
             if (!req.user.admin) {
-               return res.sendStatus(401)
+               return res.sendStatus(401).json({message: "you're not authorized to performe that action"})
             }
              next();           
             
         } catch (error) {
-            throw new Error(error)
+            console.error({message: error})
         }
     }
  
 
     if(!authorizationToken){
         res.sendStatus(401)
-        throw new Error("Authenication failed")
+        res.json({message: 'authentication failed'})
     }
    
 });
 
 
-export const productViewingProtection = asyncHandler(async(req, res, next) => {
+export const isUserAuth = asyncHandler(async(req, res, next) => {
     let authorizationToken;
 
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
@@ -49,12 +49,13 @@ export const productViewingProtection = asyncHandler(async(req, res, next) => {
             next();
          } catch (error) {
              res.sendStatus(401)
-             throw new Error(error)
+             console.error({message: error})
          }
     }
 
     if(!authorizationToken){
-        throw new Error("Authenication failed")
+        res.sendStatus(401)
+        res.json({message: 'authentication failed'})
     }
          
 });
