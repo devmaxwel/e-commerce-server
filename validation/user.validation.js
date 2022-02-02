@@ -32,3 +32,17 @@ export const loginUserValidation = object({
             })
     })
 });
+
+export const resetpasswordValidator = object({
+
+    body:object({
+           
+            email:string({
+                required_error:"Email is required"
+            }),
+            
+            password:string({
+                required_error:"Password is required"
+            })
+    })
+});
