@@ -8,7 +8,7 @@ import { createUserValidation, loginUserValidation, resetpasswordValidator } fro
  const routes=(app)=>{
    //  Server Health Check
 
-     app.get("/healthcheck", (req, res) => {
+     app.get("/api/healthcheck", (req, res) => {
         return res.sendStatus(200)
      });
 
