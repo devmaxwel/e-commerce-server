@@ -21,7 +21,7 @@ import { createUserValidation, loginUserValidation, resetpasswordValidator } fro
 
    // Products Fetching & Creation
      app.post('/api/products', isAdminAuth, createProduct);
-     app.get("/api/products",isUserAuth,fetchProducts);
+     app.get("/api/products",fetchProducts);
 
    // CRUD Operations with respective middleware 
      app.get('/api/product/:id',isUserAuth, fetchSingleProduct) //fetching single product

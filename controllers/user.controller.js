@@ -75,12 +75,15 @@ export const passwordReset= asyncHandler(async(req, res) => {
      const { email,} = req.body;
 
      const userExist = await userModel.findOne({email})
-     const token =generateToken(userExist._id)
 
      if(userExist){
        res.json({message: "A reset password link has been sent to your email"});
-       await SendGridHelper.sendPasswordResetEmail(token,email);
+       await SendGridHelper.sendPasswordResetEmail(email);
      }else{
        res.json({message: "email not found"});
      }
 });
+
+export const passwordUpdate= asyncHandler(async(req, res) => {
+  
+})

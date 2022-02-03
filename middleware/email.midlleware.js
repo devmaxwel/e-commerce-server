@@ -63,7 +63,7 @@ class SendGridHelper {
 
       }
 
-      static async sendPasswordResetEmail(){
+      static async sendPasswordResetEmail(email){
         const server = process.env.SERVER || 'https://localhost:1338/';
     
         sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
