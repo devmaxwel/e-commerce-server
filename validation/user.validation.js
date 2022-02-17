@@ -9,11 +9,11 @@ export const createUserValidation = object({
             
             password:string({
                 required_error:"Password is required"
-            }),
+            }).min(6, "Password is too short, Password must be 6 chars and above"),
     
             email:string({
                required_error:"Email is required"
-            })
+            }).email("email provided is invalid type of email please check and retry")
         
     })
 });
