@@ -63,13 +63,13 @@ export const loginUser = asyncHandler(async (req, res) => {
       admin: user.admin,
       token: token,
     });
-  } else if (user && !(await user.matchPassword)) {
-    res.status(500).json({
-      errorMessage: "wrong password!",
+  } else if (!user) {
+    res.status(400).json({
+      errorMessage: "email not found!",
     });
   } else {
     res.status(500).json({
-      errorMessage: "email not found!",
+      errorMessage: "wrong password!",
     });
   }
 });
