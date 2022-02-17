@@ -64,8 +64,7 @@ export const loginUser = asyncHandler(async(req, res) => {
     });
 
   } else {
-    res.status(400)
-    throw new Error("invalid email or password please check and try again!");
+    res.status(400).json({errorMessage :"invalid email or password please check and try again!" })
   }
 
 });
@@ -79,10 +78,7 @@ export const passwordReset= asyncHandler(async(req, res) => {
        res.json({message: "A reset password link has been sent to your email"});
        await SendGridHelper.sendPasswordResetEmail(email);
      }else{
-      res.status(400).json({errorMessage :"invalid email or password please check and try again!" })
+      res.status(400)
+      
      }
 });
-
-export const passwordUpdate= asyncHandler(async(req, res) => {
-  
-})
