@@ -47,7 +47,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-export const loginUser = asyncHandler(async (req, res, next) => {
+export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await userModel.findOne({ email });
@@ -55,13 +55,11 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   const token = generateToken(user._id);
 
   if (!user) {
-    res.status(400).json({
-      errorMessage: "!email not found",
+    res.status(500).json({
+      errorMessage: "email not found!",
     });
-    next();
-  } else if (user) {
-    next();
-  } else if (await user.matchPassword(password)) {
+  } 
+  else if (user && await user.matchPassword(password)) {
     res.json({
       _id: user._id,
       username: user.username,
@@ -69,12 +67,14 @@ export const loginUser = asyncHandler(async (req, res, next) => {
       profilePic: user.profilePic,
       admin: user.admin,
       token: token,
-    });
-  } else {
-    res.status(400).json({
-      errorMessage: "invalid email or password please check and try again!",
+    })
+  }else{
+    res.status(500).json({
+      errorMessage: "invalid email or password!",
     });
   }
+
+})
 
   // if (user && (await user.matchPassword(password))) {
   //   res.json({
@@ -91,8 +91,8 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   //   });
   // }
 
-  
-});
+
+
 
 export const passwordReset = asyncHandler(async (req, res) => {
   const { email } = req.body;
