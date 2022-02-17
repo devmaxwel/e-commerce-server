@@ -53,10 +53,9 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   const user = await userModel.findOne({ email });
 
   if (!user){
-    res.status(400).json({
+    return res.status(400).json({
       errorMessage: "email not found!",
     });
-   return;
   }
   next();
 
@@ -76,7 +75,6 @@ export const loginUser = asyncHandler(async (req, res, next) => {
       errorMessage: "wrong password!",
     });
   }
-
 });
 
 // if (user && (await user.matchPassword(password))) {
