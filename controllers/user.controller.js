@@ -9,11 +9,9 @@ export const registerUser = asyncHandler(async (req, res) => {
   const ifUserExist = await userModel.findOne({ email });
 
   if (ifUserExist) {
-    res
-      .status(400)
-      .json({
-        errorMessage: "email is already in use please check and try again",
-      });
+    res.status(400).json({
+      errorMessage: "email is already in use please check and try again",
+    });
   }
 
   if (validator.validate(req.body.email)) {
@@ -24,6 +22,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       profilePic,
       admin,
     });
+
     const token = generateToken(user._id);
 
     if (user) {
@@ -36,30 +35,33 @@ export const registerUser = asyncHandler(async (req, res) => {
         token: token,
       });
     } else {
-      res
-        .status(500)
-        .json({
-          message:
-            "an error occurred while processing your request, please try again ",
-        });
+      res.status(500).json({
+        message:
+          "an error occurred while processing your request, please try again ",
+      });
     }
-  } else{
-    res
-    .status(500)
-    .json({
+  } else {
+    res.status(500).json({
       errorMessage: "Invalid Email Type",
     });
   }
 });
 
-export const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await userModel.findOne({ email });
 
   const token = generateToken(user._id);
 
-  if (user && (await user.matchPassword(password))) {
+  if (!user) {
+    res.status(400).json({
+      errorMessage: "!email not found",
+    });
+    next();
+  } else if (user) {
+    next();
+  } else if (await user.matchPassword(password)) {
     res.json({
       _id: user._id,
       username: user.username,
@@ -69,12 +71,27 @@ export const loginUser = asyncHandler(async (req, res) => {
       token: token,
     });
   } else {
-    res
-      .status(400)
-      .json({
-        errorMessage: "invalid email or password please check and try again!",
-      });
+    res.status(400).json({
+      errorMessage: "invalid email or password please check and try again!",
+    });
   }
+
+  // if (user && (await user.matchPassword(password))) {
+  //   res.json({
+  //     _id: user._id,
+  //     username: user.username,
+  //     email: user.email,
+  //     profilePic: user.profilePic,
+  //     admin: user.admin,
+  //     token: token,
+  //   });
+  // } else {
+  //   res.status(400).json({
+  //     errorMessage: "invalid email or password please check and try again!",
+  //   });
+  // }
+
+  
 });
 
 export const passwordReset = asyncHandler(async (req, res) => {
