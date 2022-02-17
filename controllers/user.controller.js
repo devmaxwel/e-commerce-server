@@ -1,8 +1,6 @@
 import userModel from "../models/user.model.js";
 import asyncHandler from "express-async-handler";
 import { generateToken } from "../utils/jwt.util.js";
-import SendGridHelper from "../middleware/email.midlleware.js";
-
 
 export const registerUser = asyncHandler(async(req, res) => {
 
@@ -34,8 +32,6 @@ export const registerUser = asyncHandler(async(req, res) => {
       token:token,
     });
     
-
-    await SendGridHelper.sendConfirmationMail(token,email);
 
   } else {
 
