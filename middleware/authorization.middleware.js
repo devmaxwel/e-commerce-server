@@ -15,7 +15,7 @@ export const isAdminAuth = asyncHandler(async(req, res, next) => {
             // jwt.verify(token, secretkey, [options, callback])
             const decode = jwt.verify(authorizationToken, process.env.PRIVATE_KEY)
           
-            req.user = await userModel.findOne({ _id: decode.id }).select('admin')
+            req.user = await userModel.findOne({ _id: decode.id }).select('-password')
 
             // Check if admin field is true
             if (!req.user.admin) {
@@ -24,7 +24,7 @@ export const isAdminAuth = asyncHandler(async(req, res, next) => {
              next();           
             
         } catch (error) {
-            console.error({message: error})
+            res.json({message: `${error}: not allowed to performe this function`})
         }
     }
  
@@ -33,7 +33,6 @@ export const isAdminAuth = asyncHandler(async(req, res, next) => {
         res.sendStatus(401)
         res.json({message: 'authentication failed'})
     }
-   
 });
 
 

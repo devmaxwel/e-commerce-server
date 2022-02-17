@@ -45,7 +45,6 @@ export const registerUser = asyncHandler(async(req, res) => {
 
 });
 
-
 export const loginUser = asyncHandler(async(req, res) => {
   const { email, password } = req.body;
 
@@ -66,7 +65,7 @@ export const loginUser = asyncHandler(async(req, res) => {
 
   } else {
     res.sendStatus(400)
-    res.json({message: "inavalid email or password please check and try again"});
+    throw new Error({message: "inavalid email or password please check and try again"});
   }
 
 });
