@@ -54,12 +54,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const token = generateToken(user._id);
 
-  if (!user) {
-    res.status(500).json({
-      errorMessage: "email not found!",
-    });
-  } 
-  else if (user && await user.matchPassword(password)) {
+  if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
       username: user.username,
@@ -67,32 +62,32 @@ export const loginUser = asyncHandler(async (req, res) => {
       profilePic: user.profilePic,
       admin: user.admin,
       token: token,
-    })
-  }else{
+    });
+  } else if (user && !(await user.matchPassword)) {
     res.status(500).json({
-      errorMessage: "invalid email or password!",
+      errorMessage: "wrong password!",
+    });
+  } else {
+    res.status(500).json({
+      errorMessage: "email not found!",
     });
   }
+});
 
-})
-
-  // if (user && (await user.matchPassword(password))) {
-  //   res.json({
-  //     _id: user._id,
-  //     username: user.username,
-  //     email: user.email,
-  //     profilePic: user.profilePic,
-  //     admin: user.admin,
-  //     token: token,
-  //   });
-  // } else {
-  //   res.status(400).json({
-  //     errorMessage: "invalid email or password please check and try again!",
-  //   });
-  // }
-
-
-
+// if (user && (await user.matchPassword(password))) {
+//   res.json({
+//     _id: user._id,
+//     username: user.username,
+//     email: user.email,
+//     profilePic: user.profilePic,
+//     admin: user.admin,
+//     token: token,
+//   });
+// } else {
+//   res.status(400).json({
+//     errorMessage: "invalid email or password please check and try again!",
+//   });
+// }
 
 export const passwordReset = asyncHandler(async (req, res) => {
   const { email } = req.body;
