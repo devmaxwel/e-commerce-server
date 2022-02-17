@@ -47,10 +47,18 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-export const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await userModel.findOne({ email });
+
+  if (!user){
+    res.status(400).json({
+      errorMessage: "email not found!",
+    });
+   return;
+  }
+  next();
 
   const token = generateToken(user._id);
 
@@ -63,15 +71,12 @@ export const loginUser = asyncHandler(async (req, res) => {
       admin: user.admin,
       token: token,
     });
-  } else if (!user) {
-    res.status(400).json({
-      errorMessage: "email not found!",
-    });
   } else {
     res.status(500).json({
       errorMessage: "wrong password!",
     });
   }
+
 });
 
 // if (user && (await user.matchPassword(password))) {
