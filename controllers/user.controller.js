@@ -72,7 +72,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   next();
 
   if (!user) {
-    return res.status(400).json({
+      res.status(400).json({
       errorMessage: "email not found!",
     });
   }
