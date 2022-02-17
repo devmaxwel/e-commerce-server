@@ -64,8 +64,9 @@ export const loginUser = asyncHandler(async(req, res) => {
     });
 
   } else {
-    res.sendStatus(400)
-    throw new Error({message: "inavalid email or password please check and try again"});
+    // res.sendStatus(400)
+    res.statusMessage("Invalid email or Password");
+    throw new Error("invalid email or password please check and try again");
   }
 
 });
