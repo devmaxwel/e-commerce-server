@@ -11,8 +11,7 @@ export const registerUser = asyncHandler(async(req, res) => {
   const ifUserExist = await userModel.findOne({ email });
 
   if(ifUserExist){
-    res.sendStatus(409);
-    res.json({message: "email provided is already in use, please check and try again or use another one "});
+    res.status(400).json({errorMessage :"invalid email or password please check and try again!" })
   }
 
   const user = await userModel.create({
@@ -40,7 +39,7 @@ export const registerUser = asyncHandler(async(req, res) => {
 
   } else {
 
-    throw new Error({message: "an error occurred while processing your request, please try again "});
+    res.status(500).json({message: "an error occurred while processing your request, please try again "});
   }
 
 });
