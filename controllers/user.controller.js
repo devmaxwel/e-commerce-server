@@ -4,7 +4,7 @@ import { generateToken } from "../utils/jwt.util.js";
 import validator from "email-validator";
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, profilePic, admin } = req.body;
+  const { username, email, password, admin } = req.body;
 
   const ifUserExist = await userModel.findOne({ email });
 
@@ -14,20 +14,20 @@ export const registerUser = asyncHandler(async (req, res) => {
     });
   }
 
-  if (validator.validate(req.body.email)) {
+  if(validator.validate(req.body.email)) {
     const user = await userModel.create({
       username,
       email,
       password,
-      profilePic,
       admin,
     });
+
+
 
     const token = generateToken(user._id);
 
     if (user) {
       res.json({
-        _id: user._id,
         username: user.username,
         email: user.email,
         admin: user.admin,
@@ -64,7 +64,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
       token: token,
     });
   } else {
-    res.status(500).json({
+    res.status(400).json({
       errorMessage: "wrong password!",
     });
   }
