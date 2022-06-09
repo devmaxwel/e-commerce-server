@@ -4,7 +4,7 @@ import { generateToken } from "../utils/jwt.util.js";
 import validator from "email-validator";
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, admin } = req.body;
+  const { username, email, password, admin, number } = req.body;
 
   const ifUserExist = await userModel.findOne({ email });
 
@@ -14,15 +14,14 @@ export const registerUser = asyncHandler(async (req, res) => {
     });
   }
 
-  if(validator.validate(req.body.email)) {
+  if (validator.validate(req.body.email)) {
     const user = await userModel.create({
       username,
       email,
       password,
+      number,
       admin,
     });
-
-
 
     const token = generateToken(user._id);
 
@@ -31,6 +30,7 @@ export const registerUser = asyncHandler(async (req, res) => {
         username: user.username,
         email: user.email,
         admin: user.admin,
+        number: user.number,
         profilePic: user.profilePic,
         token: token,
       });
@@ -61,6 +61,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
       email: user.email,
       profilePic: user.profilePic,
       admin: user.admin,
+      number: user.number,
       token: token,
     });
   } else {
@@ -72,7 +73,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   next();
 
   if (!user) {
-      res.status(400).json({
+    res.status(400).json({
       errorMessage: "email not found!",
     });
   }
