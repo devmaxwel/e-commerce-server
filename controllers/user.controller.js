@@ -4,7 +4,7 @@ import { generateToken } from "../utils/jwt.util.js";
 import validator from "email-validator";
 
 export const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password, admin, number } = req.body;
+  const { username, email, password, admin, phone } = req.body;
 
   const ifUserExist = await userModel.findOne({ email });
 
