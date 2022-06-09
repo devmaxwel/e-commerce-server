@@ -19,7 +19,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       username,
       email,
       password,
-      number,
+      phone,
       admin,
     });
 
@@ -30,7 +30,7 @@ export const registerUser = asyncHandler(async (req, res) => {
         username: user.username,
         email: user.email,
         admin: user.admin,
-        number: user.number,
+        phone: user.phone,
         profilePic: user.profilePic,
         token: token,
       });
@@ -61,7 +61,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
       email: user.email,
       profilePic: user.profilePic,
       admin: user.admin,
-      number: user.number,
+      phone: user.phone,
       token: token,
     });
   } else {
