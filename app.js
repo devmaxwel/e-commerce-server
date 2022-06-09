@@ -10,7 +10,7 @@ const app = express();
 
 app.use(express.json());
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "https://main--e-rayon.netlify.app/",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
